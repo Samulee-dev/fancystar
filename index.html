@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FancyStar</title>
+  <meta property="title" content="FancyStar">
+		<meta property="application-name" content="FancyStar" />
+		<meta property="author" content="Samulee" />
+		<meta property="description" content="FancyStar - Play Html-5 Games, Download Games For Free, Musics, Videos, Wallpapers, Ebooks, Comics, Apps, Upload your files And Also Chat with Fancy(AI)..." />
+		
+		<meta property="keywords" content="FancyStar, Html-5, Games, Free Downloads, Musics, Videos, Wallpapers, Ebooks, Comics, Pdf, Fancy(AI), AI, Hompage" />
+		
+		<meta property="og:title" content="FancyStar">
+		<meta property="og:description" content="FancyStar - Play Html-5 Games, Download Games For Free, Musics, Videos, Wallpapers, Ebooks, Comics, Apps, Upload your files And Also Chat with Fancy(AI)...">
+	<meta property="og:image" content="/favicon.png">	
+	<meta property="twitter:title" content="FancyStar">
+	<meta property="twitter:description" content="FancyStar - Play Html-5 Games, Download Games For Free, Musics, Videos, Wallpapers, Ebooks, Comics, Apps, Upload your files And Also Chat with Fancy(AI)...">
+			
+  
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+ <link rel="stylesheet" href="/styles/style.css">
+ <link rel="stylesheet" href="/styles/dark.css">
+  <link rel="stylesheet" href="/styles/styles2.css">
+ <script src="/@fancystar/web/storage.min.js"></script>
+  <style>
+
+  </style>
+  
+</head>
+
+<body id="bdy">
+    <div class="top">
+
+      <img class="photo" src="/Images/Nigeria flag.png" alt="Nigerian flag">
+      
+      <div id="nav" onclick="Opm()" class="navv"><div id="nav1"></div><div id="nav2"></div><div id="nav3"></div></div>
+      
+      
+          <img src="/Images/Fs.png" alt="FancyStar" width"30px" height="40px" class="fs">
+          <img src="/Images/FancyStar icon.png" alt="FancyStar" width="60x" height="60px" class="fsic">
+                
+    </div>
+    <div class="ov2"><table>
+      <tr>
+        <td><a href="/Search/search.html#search">
+        <input type="search" name="search" class="search" placeholder="🔍 Search" id="ssearch">
+      </a>
+        </td>
+                  <div id="acct">
+        <td>
+<div id="acct1">
+      <a href="/Accounts/Login.html"><p style="margin-top: 5px; margin-left: -45px; border: 2px dotted white; height: 35px; width: 60px; color: lightblue; background-color: greenyellow; text-shadow: 1px 1px black; padding: 5px; box-shadow: 2px 2px black; margin-top: -2px">Login</p></a></div></td>
+      
+      <td>
+        
+              <a href="/Accounts/Signup.html"><p style="margin-top: 5px; margin-left: 0px; border: 2px dotted white; height: 35px; width: 60px; color: lightblue; background-color: lime; text-shadow: 1px 1px black; padding: 5px; box-shadow: 2px 2px black; margin-top: -2px" id="signup">
+                Signup</p></a>
+     
+      </td>
+      </div>
+      </tr>
+      </table>
+      
+      <div id="menu">
+        <div id="over">
+        <h2 id="menuh">Menu</h2>
+        <p id="dtxt">Dark Mode</p>
+        <div id="dcover" onclick="Dark()">
+          <div id="darkm">
+
+            </div>
+                        <div id="off">OFF</div>
+                        
+       <div id="on">ON</div>              
+        </div>
+        <button id="Xc" onclick="Clm()">X</button>
+<a href="/AI/chat.html"><table style="margin-top: -30px" class="fancytable">
+     <tr>
+         <td><img src="/Images/Fancy.PNG" alt="" height="50px" width="50px" id="fancy"></td> <td> Fancy(AI)</td>
+      </tr>
+    </table></a>
+    <br>
+        <h3 id="home" class="navcontent">Home</h3>
+       <a href="/Search/search.html#search"><h3 id="searchh" class="navcontent">Search</h3></a>
+      <h3 id="game" onclick="Nav.games()" class="navcontent">Games 🔻</h3>
+     <a href="/H5games/Html5games.html"> <h4 class="sub" id="subb">Html-5 Games</h4></a>
+            <a href="/Games/Games.html#android"><h4 class="sub" id="subb2">Android Games</h4>
+            </a>
+            <a href="/Games/Games.html#java"><h4 class="sub" id="subb3">Java Games</h4> </a>    
+      <h3 id="music" onclick="Nav.music()" class="navcontent">Musics 🔻</h3>
+      <a href="/Music/music.html#mostdownloaded"><h4 class="sub" id="msub">Most downloaded...</h4></a>
+            <a href="/Music/music.html#TopRated">  <h4 class="sub" id="msub2">Top Rated musics</h4></a>
+              <a href="/Music/music.html#Nigerian"><h4 class="sub" id="msub3">Nigerian Musics</h4></a>
+      <h3 id="video"class="navcontent" onclick="Nav.video()">Videos 🔻</h3>
+            <a href="/Videos/videos.html#mostdownloaded"><h4 class="sub" id="vsub">Most downloaded...</h4></a>
+            <a href="/Videos/videos.html#Cartoon">  <h4 class="sub" id="vsub2"> Cartoon Videos</h4></a>
+              <a href="/Videos/videos.html#Scindtech">  <h4 class="sub" id="vsub3"> Science and tech...</h4>  </a>        
+      <a href="/Wallpapers/wallpapers.html"><h3 id="wallpaper" class="navcontent">Wallpapers</h3></a>
+   <a href="/Ebooks/ebooks.html"><h3 id="ebooks" class="navcontent">E-books</h3></a>
+      <a href="/Apps/apps.html"><h3 id="apps" class="navcontent">Applications</h3></a>
+        </div></div>
+        
+    </div>
+    
+  <div class="conts" id="cont">
+    <div class="top2" id="top">
+      <img src="/Images/H5games.png" alt="" height="40px" width="40px" style="margin-top: 0px">
+            <img src="/Images/Music.png" alt="" height="40px" width="40px" style="margin-top: 0px">
+                  <img src="/Images/Game.png" alt="" height="40px" width="40px" style="margin-top: 0px">
+                <img src="/Images/Videos.png" alt="" height="40px" width="40px" style="margin-top: 0px">
+                
+    </div>
+    <div class="bdr" id="bdr1">
+      
+      
+            <a href="/H5games/Html5games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/H5games.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                 
+                  </td>
+                  <td><b class="linkb" id="bdrtxt1"> Html-5 Games</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div class="tab">
+                  <table>
+                    <tr>
+                     <td class="table"> 
+                    <a href="/H5games/Html5games.html#action"> 
+                    <img src="/Images/AH5games.png" alt="Action Html-5 games" height="90px" width="90px" class="timg"></a></td>
+                      
+                      
+                      <td class="table"><a href="/H5games/Html5games.html#racing"> <img src="/Images/RH5games.png" alt="Racing Html-5 games" height="90px"
+                      width="90px" class="timg"></a></td>
+                      <td class="table">
+                       <a href="/H5games/Html5games.html#sports"> 
+                        <img src="/Images/SH5games.png" alt="Sports Html-5 games" height="90px" width="90px" class="timg"></a></td>
+                      
+                    </tr>
+                    <tr>
+                      
+                      <td class="tablelk" colspan="3"><a href="/H5games/Html5games.html" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>
+    
+            <div class="bdr" id="bdr2">
+      
+      
+            <a href="/Latest Updates/Latestupdates.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/Latest updates.gif" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt2"> Latest Updates</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    <tr>
+                      
+                      <td class="table"><a href="/Latest Updates/latestgames.html"><img src="/Images/GLU.png" alt="Latest Games" height="90px" width="90px" class="timg"></a></td>
+                      <td class="table"><a href="/Latest Updates/latestmusics.html"><img src="/Images/MLU.png" alt="Latest Musics" height="90px" width="90px" class="timg"></a>
+                      
+                      </td>
+                      <td class="table"><a href="/Latest Updates/latestvideos.html"><img src="/Images/VLU.png" alt="Latest Videos" height="90px" width="90px" class="timg"></a></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="/Latest Updates/latestupdates.html" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>
+    
+      <div class="bdr" id="bdr3">
+      
+      
+            <a href="/Games/Games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/Game.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt3"> Games</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    
+                    <tr>
+                      <td class="table"><a href="/Games/Games.html#java"><img src="/Images/Jgames.png" alt="Java games" height="90px" width="90px" class="timg"></a></td>
+                      <td class="table"><a href="/Games/Games.html#android"><img src="/Images/Agames.png" alt="Android games" height="90px" width="90px" class="timg"></a></td>
+                      <td class="table"><a href="/Games/Games.html#psp"><img src="/Images/Pgames.png" alt="Psp games" height="90px" width="90px" class="timg"></a></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="/Games/Games.html" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>
+
+    <a href="/Support/support.html"><div class="bdr" style="height: 80px;" id="supbdr"><table class="fancytxt">
+      <tr>
+        
+      
+      <td><img src="/Images/arrow.png" alt="" height="50px" width="50px" id="arrow"></td> <td> Feeling Lucky, Click here</td>
+      </tr>
+    </table></div></a>
+          <div class="bdr" id="bdr4">
+      
+      
+            <a href="/Html5games/H5games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/Music.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt4"> Musics</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    <tr>
+                      <td class="table"><img src="/Images/Trm.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Lm.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Nm.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>
+    
+          <div class="bdr" id="bdr5">
+      
+      
+            <a href="/Html5games/H5games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/Videos.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt5"> Videos</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    <tr>
+                      <td class="table"><img src="/Images/Avideos.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Cvideos.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Techvideos.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>  
+          <div class="bdr" id="bdr6">
+      
+      
+            <a href="/Html5games/H5games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/Wallpapers.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt6"> Wallpapers</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    <tr>
+                      <td class="table"><img src="/Images/Bwp.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/3dw.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Lw.gif" alt="Java games" height="90px" width="90px" class="timg"></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>  
+    <a href="/AI/chat.html"><div class="bdr" style="height: 80px;" id="supbdr2"><table class="fancytxt">
+     <tr>
+         <td><img src="/Images/arrow.png" alt="" height="50px" width="50px" id="arrow2"></td> <td> Chat with Fancy(AI)</td>
+      </tr>
+    </table></div></a>
+    
+              <div class="bdr" id="bdr7">
+      
+      
+            <a href="/Html5games/H5games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/Ebook.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt7"> E-Books</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    <tr>
+                      <td class="table"><img src="/Images/comics.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/stryb.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/pdfs.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>  
+    
+                  <div class="bdr" id="bdr8">
+      
+      
+            <a href="/Html5games/H5games.html" class="link"><div class="w3-container" style="height: 70px; border-bottom: 2px solid green">
+              <table>
+                <tr>
+                  <td>
+              <img src="/Images/App.png" alt="" width="40px" height="40px" style="margin-top: 5px;" >
+                  </td>
+                  <td><b class="linkb" id="bdrtxt8"> Applications</b></td>
+                  </tr>
+                  </table>
+              
+              </div></a>
+                <div style="height: 126px" class="tab">
+                  <table>
+                    <tr>
+                      <td class="table"><img src="/Images/Aapp.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Oapp.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                      <td class="table"><img src="/Images/Japp.png" alt="Java games" height="90px" width="90px" class="timg"></td>
+                    </tr>
+                    <tr>
+                      <td class="tablelk" colspan="3"><a href="" class="tablelk">More ...</a></td>
+                    </tr>
+                  </table>
+                </div>
+              
+    </div>  
+    
+    <a href="/Email/email.html"><div class="bdr" style="height: 80px;" id="supbdr3"><table class="fancytxt">
+     <tr>
+         <td><img src="/Images/Email.png" alt="" height="50px" width="50px" id="arrow3"></td> <td> E-mail : </td>
+      </tr>
+    </table></div></a>  
+    
+    
+     <a href="/AI/chat.html"><div class="bdr" style="height: 80px;" id="supbdr4"><table class="fancytxt">
+     <tr>
+         <td><img src="/Images/Fancy.PNG" alt="" height="50px" width="50px" id="arrow4"></td> <td> Chat with Fancy(AI)</td>
+      </tr>
+    </table></div></a> 
+    
+    <a href="/Support/feeling lucky.html"><div class="bdr" style="height: 80px;" id="supbdr5"><table class="fancytxt">
+     <tr>
+         <td><img src="/Images/arrow.png" alt="" height="50px" width="50px" id="arrow5"></td> <td> Feeling Lucky, Click here</td>
+      </tr>
+    </table></div></a>    
+  <div class="w3-container " style="background-color: green;  height: 380px; border-radius: 0px; left: 0px; border-top: 6px solid black">
+    <a href="" class="link"><div class="abtweb" style="height: 45px; margin: 10px; box-shadow: 2px 2px white; border: 2px solid grey">
+      
+      <p class="ab"><b class="link">About Website</b></p>
+      
+    </div></a><div id="foot">
+    <h3 id="Fcs">Contact Us</h3>
+    <ul>
+      <li>Email : </li>
+      <li>Whatsapp : </li>
+      <li>Facebook : </li>
+    </ul>
+    <div class="box">
+      <h3>Message Us</h3>
+     <form action="Website/message.php">
+    <input type="email" name="" id="useremail" placeholder="Enter Your E-mail Address" required>
+         <input type="text" placeholder="Your Message To FancyStar" required>
+        <button type="submit">Send</button>
+        </form>
+     <p class="cpr">Copyright ©2024 FancyStar All right reserved.</p>
+    </div>
+    </div>
+    <h3 class="link" style="text-align: center"><a href="#top" class="link">Back To Top</h3></a>
+  </div>
+  </div>
+<p style="text-align: center; margin: 0px; border-bottom: 2px solid green; background-color: green">FancyStar-<span id="year"></span></p>
+<div id="BTT"><h3 class="Btt">Top ⬆</h3></div>
+<script src="/Scripts/script.js"></script>
+<script src="/Scripts/dark.js"></script>
+<script>
+  let y = new Date();
+  let yy = y.getFullYear();
+  document.getElementById("year").innerText = yy;
+</script>
+</body>
+
+</html>
