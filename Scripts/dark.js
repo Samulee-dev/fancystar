@@ -8,7 +8,7 @@ if (Mode_val == "dark"|| txtdw == "dark") {
   document.getElementById("darkm").style.backgroundColor = "blue";
   document.getElementById("dcover").style.backgroundColor = "black";
   document.getElementById("dcover").style.border = "2px solid white";
-  document.getElementById("bdy").style.backgroundImage = "url(../Images/darkbg.png)";
+  document.getElementById("bdy").style.backgroundImage = "url('../Images/darkbg.png')";
   
   document.getElementById("menu").style.backgroundColor = "black";
   document.getElementById("bdr1").style.backgroundColor = "black";
@@ -69,7 +69,7 @@ function Dark() {
     document.getElementById("darkm").style.backgroundColor = "green";
     document.getElementById("dcover").style.backgroundColor = "white";
     document.getElementById("dcover").style.border = "2px solid black";
-    document.getElementById("bdy").style.backgroundImage = "url(../Images/sbg.png)";
+    document.getElementById("bdy").style.backgroundImage = "url('../Images/sbg.png')";
     document.getElementById("menu").style.backgroundColor = "green";
     document.getElementById("bdr1").style.backgroundColor = "white";
     document.getElementById("bdr1").style.borderBottom = "2px solid #e6e6e6";
@@ -132,7 +132,7 @@ document.getElementById("bdrtxt8").style.textShadow = "1px 1px white";
       document.getElementById("darkm").style.backgroundColor = "blue";
         document.getElementById("dcover").style.backgroundColor = "black";
           document.getElementById("dcover").style.border = "2px solid white";
-            document.getElementById("bdy").style.backgroundImage = "url(../Images/darkbg.png)";
+            document.getElementById("bdy").style.backgroundImage = "url('../Images/darkbg.png')";
           document.getElementById("menu").style.backgroundColor = "black"; 
           document.getElementById("bdr1").style.backgroundColor = "black" ; 
             document.getElementById("bdr1").style.borderBottom = "2px solid greenyellow" ;
