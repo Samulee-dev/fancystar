@@ -15,6 +15,9 @@ body {
   background-image: url('../Images/sbg.png');
  
 }
+.darkbdy {
+  background-image: url('../Images/darkbg.png');
+}
 .form {
   width: 280px;
   padding: 30px;
