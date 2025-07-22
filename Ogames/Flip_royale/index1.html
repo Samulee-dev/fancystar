@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FancyStar Flip Royale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      background: radial-gradient(ellipse at center, #0d1117 0%, #000000 100%);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      background-image: url("assets/bg.png");
+      background-size: 100% 100%;
+      user-select: none;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #00f0ff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00f0ff;
+    }
+
+    .bottle-btn {
+      width: 120px;
+      height: 120px;
+      background-image: url('assets/bottle.png'); /* Replace with your bottle image */
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      animation: rotate 2.5s linear infinite;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 10px #00f0ff);
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 90%;
+      max-width: 300px;
+    }
+
+    .menu button {
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #00f0ff55;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      backdrop-filter: blur(4px);
+    }
+
+    .menu button:hover {
+      background: #00f0ff;
+      color: #000;
+      transform: scale(1.05);
+      font-weight: bold;
+      box-shadow: 0 0 12px #00f0ff;
+    }
+    #menu2, 
+    #menu3,
+    #menu4,
+    #menu5{
+      display: none;
+    }
+        .fsopt-popup {
+          display: none;
+      position: absolute;
+      width: 320px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      padding: 24px;
+      color: #fff;
+    }
+
+    .fsopt-popup h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .fsopt-popup label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .fsopt-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .fsopt-toggle-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    /* Custom toggle switch */
+    .fsopt-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .fsopt-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .fsopt-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: 0.4s;
+    }
+
+    .fsopt-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    .fsopt-switch input:checked + .fsopt-slider {
+      background-color: #00ffbb;
+    }
+
+    .fsopt-switch input:checked + .fsopt-slider:before {
+      transform: translateX(20px);
+    }
+
+    .fsopt-more-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 255, 170, 0.15);
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 255, 170, 0.5);
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin: 0 auto;
+    }
+
+    .fsopt-more-btn:hover {
+      background: rgba(0, 255, 170, 0.25);
+    }
+
+    .fsopt-badge {
+      background: linear-gradient(to right, #ff4b2b, #ff416c);
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+      box-shadow: 0 0 6px rgba(255, 65, 108, 0.6);
+      display: inline-block;
+      transform: translateY(-2px);
+    }
+
+    .fsopt-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 18px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .fsopt-close-btn:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+    
+        .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .popup {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      width: 350px;
+      text-align: center;
+      animation: popIn 0.3s ease;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 1.4em;
+    }
+
+    .popup input {
+      width: 80%;
+      padding: 12px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    .popup button {
+      background: #1e90ff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .popup button:hover {
+      background: #0078d4;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes popIn {
+      from {transform: scale(0.9); opacity: 0;}
+      to {transform: scale(1); opacity: 1;}
+    }
+    #gameScreen {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: 100vh;
+      width: 100%;
+      display: none;
+    }
+    #loading_screen {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: #686970;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      color: white;
+      overflow: hidden;
+      background-image: url("assets/splash.jpg");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      height: 100vh;
+      width: 100%;
+      top: 0px;
+      left: 0px;
+    }
+        .progress-bar-container {
+      width: 80%;
+      height: 10px;
+      background: #1e293b;
+      position: absolute;
+      bottom: 100px;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #00ffcc, #00bfff);
+      transition: width 0.2s linear;
+    }
+    
+    .continue-text {
+      position: absolute;
+      bottom: 100px;
+      font-size: 1.2rem;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      display: none;
+    }
+    
+    .continue-text:hover {
+      /*    text-decoration: underline;*/
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="margin-top: -40px;">FlipRoyale</h1>
+
+  <div class="bottle-btn" onclick="spinBottle()"></div>
+
+  <div class="menu" id="menu">
+    <button onclick="singlePlayer()">🎮 Singleplayer (with bots)</button>
+    <button onclick="multiPlayer()">👥 Multiplayer</button>
+    <button onclick="highScores()">⚡ HighScores</button>
+    <button onclick="showOptions()">⚙️ Options</button>
+    <button onclick="moreGame()">🕹️ More Games</button>
+    <button onclick="rateGame()">⭐ Rate Game</button>
+    <button onclick="exit()">🚪 Exit</button>
+  </div>
+  
+  <div class="menu" id="menu2">
+    <button onclick="singTwoPlys()">🎮 Two Players (1v1)</button>
+    <button onclick="singThrPlys()">🎮 Three Players</button>
+    <button onclick="singFrPlys()">🎮 Four Players</button>
+    <button onclick="mainMenu()">🏠 MainMenu</button>
+  </div>
+  
+    <div class="menu" id="menu3">
+    <button onclick="singTwoPlysCpuBot()"><span class="username">...</span> VS CPU-Bot (beginner)</button>
+    <button onclick="singTwoPlysAlphaBot()"><span class="username">...</span> VS AlphaBot (amateur</button>
+    <button onclick="singTwoPlysZetaCore()"><span class="username">...</span> VS ZetaCore (professional)</button>
+    <button onclick="Back(3)">Back ↩️</button>
+  </div>
+  
+    <div class="menu" id="menu4">
+    <button onclick="multiOff()">🎮Head To Head (offline)</button>
+    <button onclick="multiOn()">🎮 Wireless Multiplayer (online)</button>
+  <!--  <button onclick="singFrPlys()">🎮 Four Players</button>-->
+    <button onclick="mainMenu()">🏠 MainMenu</button>
+  </div>
+  
+    <div class="fsopt-popup" id="options">
+    <button class="fsopt-close-btn" onclick="closeOptions()">✖</button>
+    <h2>⚙️ Options</h2>
+    
+    <!-- Music Toggle -->
+    <div class="fsopt-toggle-group">
+      <label for="fsopt-music">Music</label>
+      <label class="fsopt-switch">
+        <input type="checkbox" id="fsopt-music" onclick="soundOption()" checked>
+        <span class="fsopt-slider"></span>
+      </label>
+    </div>
+    
+    <!-- Username Input -->
+    <label for="fsopt-username">Change Gaming Name</label>
+    <input type="text" id="fsopt-username" class="fsopt-input" placeholder="Enter new name..." maxlength="10" onchange="newFile.gamingName = document.getElementById('fsopt-username').value; storage.store(newFile); alert('Gaming Name Updated 😊')">
+    
+    <!-- More Games -->
+    <div class="fsopt-more-btn" onclick="moreGame()">
+      More Games <span class="fsopt-badge">🆕</span>
+    </div>
+  </div>
+  
+  <div class="overlay" id="namePopup">
+  <div class="popup">
+    <h2>Input your gaming name for <span style="color: #1e90ff;">Flip Royale</span></h2>
+    <input type="text" id="playerName" placeholder="Enter your name" maxlength="10">
+    <button onclick="submitName()">Continue</button>
+  </div>
+</div>
+<iframe class="" src="" frameborder="0" id="gameScreen"></iframe>
+<div id="loading_screen">
+    <div class="progress-bar-container" id="pbc">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  
+  <div class="continue-text" id="continueText">Click to Continue</div>
+</div>
+<audio src="assets/music.mp3" id="bgmusic"></audio>
+  <script>
+  
+  var menu = document.getElementById("menu");
+  var menu2 = document.getElementById("menu2");
+  var menu3 = document.getElementById("menu3");
+    function spinBottle() {
+      const bottle = document.querySelector('.bottle-btn');
+      bottle.style.animation = 'none';
+      bottle.offsetHeight; // Force reflow
+      bottle.style.animation = 'rotate 2.5s linear infinite';
+    }
+    function singlePlayer() {
+    var usn = document.getElementsByClassName("username");
+    for (i = 0; i < usn.length; i++) {
+      usn[i].innerText = newFile.gamingName;
+    }
+      setTimeout(() => {
+        menu.style.display = "none";
+        menu2.style.display = "flex";
+      }, 500);
+    }
+    function mainMenu() {
+      setTimeout(() => {
+  menu2.style.display = "none";
+  menu4.style.display = "none";
+  menu.style.display = "flex";
+}, 500);
+    }
+    
+    function singTwoPlys() {
+      setTimeout(() => {
+  menu2.style.display = "none";
+  menu3.style.display = "flex";
+}, 500);
+    }
+    function multiPlayer() {
+  setTimeout(() => {
+    menu.style.display = "none";
+    menu4.style.display = "flex";
+  }, 500);
+}
+    var gameScreen = document.getElementById("gameScreen");
+    function singTwoPlysCpuBot() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "flex";
+    startGame();
+    gameScreen.src = "pages/twop.html";
+ //   gameScreen.src = "https://fancystars.com.ng";
+   gameScreen.style.display = "block";
+  }, 200);
+}
+function singTwoPlysAlphaBot() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "flex";
+    startGame();
+    gameScreen.src = "pages/twop2.html"
+    gameScreen.style.display = "block";
+  }, 200);
+}
+function singTwoPlysZetaCore() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "flex";
+    startGame();
+    gameScreen.src = "pages/twop3.html"
+    gameScreen.style.display = "block";
+  }, 200);
+}
+
+    function singThrPlys() {
+  setTimeout(() => {
+  document.getElementById("loading_screen").style.display = "flex";
+  startGame();
+  gameScreen.src = "pages/thrp.html"
+  gameScreen.style.display = "block";
+}, 200);
+}
+function singFrPlys() {
+  setTimeout(() => {
+  document.getElementById("loading_screen").style.display = "flex";
+  startGame();
+  gameScreen.src = "pages/frp.html"
+  gameScreen.style.display = "block";
+}, 200);
+}
+function multiOff() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "flex";
+    startGame();
+    gameScreen.src = "pages/multioff.html";
+    gameScreen.style.display = "block";
+  }, 200);
+}
+function multiOn() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "flex";
+    startGame();
+    gameScreen.src = "pages/multion.html";
+    gameScreen.style.display = "block";
+  }, 200);
+}
+function highScores() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "flex";
+    startGame();
+    gameScreen.src = "highscores.html";
+    gameScreen.style.display = "block";
+  }, 200);
+}
+function Back(num) {
+  var id = "menu"+num;
+  var id2 = "menu"+(num - 1);
+  setTimeout(() => {
+  document.getElementById(id).style.display = "none";
+  document.getElementById(id2).style.display = "flex";
+  }, 500);
+}
+var newFile = {
+  gamingName: "",
+  highScores: [],
+  music: true
+}
+function submitName() {
+  const name = document.getElementById("playerName").value.trim();
+  if (name) {
+    alert("Welcome, " + name + "!");
+    document.getElementById("namePopup").style.display = "none";
+    newFile.gamingName = name;
+    storage.store(newFile);
+    // You can now use the `name` variable in your game
+  } else {
+    alert("Please enter a name to continue.");
+  }
+}
+
+var storage = {
+  gamingName: "",
+  highScores: [],
+  music: true,
+  store : function(file) {
+   localStorage.setItem("fancystar_fliproyale", JSON.stringify(file));
+  },
+  retrieve : function() {
+    var data = JSON.parse(localStorage.getItem("fancystar_fliproyale") || false);
+    return data;
+  }
+}
+
+if (!storage.retrieve()) {
+
+}
+else {
+  document.getElementById("namePopup").style.display = "none";
+  storage.gamingName = storage.retrieve().gamingName;
+  storage.highScores = storage.retrieve().highScores;
+  storage.music = storage.retrieve().music;
+  newFile.gamingName = storage.gamingName;
+  newFile.highScores = storage.highScores;
+  newFile.music = storage.music;
+  //console.log(storage);
+}
+
+const progressBar = document.getElementById('progressBar');
+const continueText = document.getElementById('continueText');
+
+let progress = 0;
+let loaded_tr = false;
+const interval = setInterval(() => {
+  if (progress < 100) {
+    progress++;
+    progressBar.style.width = progress + '%';
+  } else {
+    clearInterval(interval);
+    document.getElementById("pbc").style.display = "none";
+    continueText.style.display = 'block';
+    setTimeout(() => {
+      continueText.style.opacity = 1;
+      loaded_tr = true;
+    }, 200);
+  }
+}, 100); // adjust for speed
+document.getElementById("namePopup").style.display = "none";
+var game_loaded = false;
+window.addEventListener("click", ()=> {
+  if (loaded_tr) {
+    continueGame();
+    loaded_tr = false
+  }
+  else if (game_loaded) {
+    document.getElementById("loading_screen").style.display = "none";
+    game_loaded = false;
+  }
+})
+
+function startGame() {
+  document.getElementById("pbc").style.display = "block";
+  continueText.style.display = 'none';
+  progress = 0;
+  progressBar.style.width = progress + '%';
+  const interval = setInterval(() => {
+      if (progress < 80) {
+        progress++;
+        progressBar.style.width = progress + '%';
+      } else {
+        //alert("hi");
+        if (isIframeLoaded(gameScreen)) {
+          progress = 100;
+          progressBar.style.width = progress + '%';
+        clearInterval(interval);
+        document.getElementById("pbc").style.display = "none";
+        continueText.style.display = 'block';
+        setTimeout(() => {
+          continueText.style.opacity = 1;
+          game_loaded = true;
+      //    loaded_tr = true;
+        }, 200);
+        }
+      }
+}, 50);
+}
+function isIframeLoaded(iframe) {
+  try {
+  return iframe.contentWindow && iframe.contentWindow.document.readyState === 'complete';
+  }
+  catch(e) {
+    
+  }
+}
+function continueGame() {
+  setTimeout(() => {
+    document.getElementById("loading_screen").style.display = "none";
+    if (newFile.music) {
+      playMusic();
+    }
+    if (!storage.retrieve()) {
+  document.getElementById("namePopup").style.display = "flex";
+}
+  }, 200);
+}
+let musply;
+function playMusic() {
+  
+  document.getElementById("bgmusic").volume = 0.4;
+  document.getElementById("bgmusic").play();
+  musply = setInterval(() => {
+    if (newFile.music) {
+    document.getElementById("bgmusic").play();
+    }
+    //console.log("play");
+  }, 95000);
+}
+//document.getElementById("options").style.display = "none";
+function showOptions() {
+  setTimeout(() => {
+    document.getElementById("options").style.display = "block";
+    document.getElementById("fsopt-username").value = newFile.gamingName;
+    if (!newFile.music) {
+      document.getElementById('fsopt-music').checked = false;
+    }
+  }, 500);
+}
+function closeOptions() {
+  setTimeout(() => {
+  document.getElementById("options").style.display = "none";
+  //document.getElementById("fsopt-username").value = newFile.gamingName;
+}, 500);
+}
+function soundOption() {
+  setTimeout(() => {
+    if (newFile.music) {
+      newFile.music = false;
+      document.getElementById("bgmusic").pause();
+      clearInterval(musply);
+    }
+    else {
+      newFile.music = true;
+      playMusic();
+    }
+    storage.store(newFile);
+  }, 200);
+}
+window.addEventListener("message", (event) => {
+  if (event.data == "gameover") {
+    setTimeout(() => {
+      gameScreen.style.display = "none";
+    }, 200);
+  }
+})
+function moreGame() {
+ setTimeout(() => {
+   isDirty = false;
+   window.open("https://fancystars.com.ng/Games/more_games.html?q=fsfr");
+ }, 200);
+}
+function rateGame() {
+  setTimeout(() => {
+    isDirty = false;
+    window.open("https://fancystars.com.ng/Games/Flip_royale/#comentid");
+  }, 200);
+}
+function exit() {
+  isDirty = false;
+  if (newFile.music) {
+    document.getElementById("bgmusic").pause();
+clearInterval(musply);
+  }
+  setTimeout(() => {
+  parent.postMessage("exit", "*");
+  }, 500);
+  
+}
+let isDirty = false;
+setTimeout(() => {
+  isDirty = true;
+}, 5000);
+window.addEventListener("beforeunload", function(e) {
+  if (isDirty) {
+    
+    e.preventDefault();
+    e.returnValue = ""; // Required for Chrome
+    // Note: Browsers will show a default message, not this one
+  }
+});
+var post_message = "loaded";
+parent.postMessage(post_message, "*");
+ </script>
+</body>
+</html>

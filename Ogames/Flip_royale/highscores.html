@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FancyStar Flip Royale - High Scores</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: transparent;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      user-select: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 750px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    .match {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .players {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #e0f7ff;
+    }
+
+    .score {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffd;
+    }
+
+    @media (max-width: 480px) {
+      .players {
+        font-size: 16px;
+      }
+
+      .score {
+        font-size: 18px;
+      }
+    }
+    
+    .button {
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: #00ffd5;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  </style>
+</head>
+<body>
+ <button onclick="Quit()" style="position: absolute; top: 0px; left: 60%;" class="button">MainMenu</button>
+  <div class="container">
+    <h1>🎮 High Scores</h1>
+
+    <!-- 2 Players Match -->
+    <div class="match" id="twoplayers">
+
+    </div>
+
+    <!-- 3 Players Match -->
+    <div class="match" id="threePlayers">
+    </div>
+
+    <!-- 4 Players Match -->
+    <div class="match" id="fourPlayers">
+
+    </div>
+
+  </div>
+<script>
+var twoPlayers = document.getElementById("twoplayers");
+twoPlayers.innerHTML = ``;
+var threePlayers = document.getElementById("threePlayers");
+threePlayers.innerHTML = ``;
+var fourPlayers = document.getElementById("fourPlayers");
+fourPlayers.innerHTML = ``;
+var storedHighscores = JSON.parse(localStorage.getItem("fancystar_fliproyale")).highScores;
+for(i=0; i<storedHighscores.length; i++) {
+  if (storedHighscores[i].length == 4) {
+    twoPlayers.innerHTML += `<div class="players">${storedHighscores[i][0]} vs ${storedHighscores[i][1]}</div> <div class = "score" > ${storedHighscores[i][2]} : ${storedHighscores[i][3]} </div>`;
+  }
+ 
+ else if (storedHighscores[i].length == 6) {
+  threePlayers.innerHTML += `<div class="players">${storedHighscores[i][0]} vs ${storedHighscores[i][1]} vs ${storedHighscores[i][2]}</div> <div class = "score" > ${storedHighscores[i][3]} : ${storedHighscores[i][4]} : ${storedHighscores[i][5]}</div>`;
+}
+
+else if (storedHighscores[i].length == 8) {
+  fourPlayers.innerHTML += `<div class="players">${storedHighscores[i][0]} vs ${storedHighscores[i][1]} vs ${storedHighscores[i][2]} vs ${storedHighscores[i][3]}</div> <div class = "score" > ${storedHighscores[i][4]} : ${storedHighscores[i][5]} : ${storedHighscores[i][6]} : ${storedHighscores[i][7]}</div>`;
+}
+}
+  function Quit() {
+  setTimeout(() => {
+    parent.postMessage("gameover", "*");
+  }, 200);
+}
+</script>
+</body>
+</html>
