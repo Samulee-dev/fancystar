@@ -346,6 +346,8 @@ var plyid;
     //  console.log(this.responseText);
     if (this.responseText == "success") {
       added = true;
+      checkbg = true;
+      runBg();
     }
     }
     plyid = generateId(8);
@@ -403,17 +405,55 @@ req.send();
 
 //  fetchList();
 //  addNew();
+var checkbg = false;
 function runBg() {
-  
+  if (added) {
+  var req = new XMLHttpRequest();
+req.onload = function() {
+    if (!this.responseText.includes("File not found or not allowed.")) {
+    //  document.getElementById("online").innerHTML = "Players Online: Click on a player to connect" + this.responseText;
+    }
+    else {
+      analyze(this.responseText);
+    }
+   if (checkbg) {
+     runBg();
+   }
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.php?q="+plyid+".txt&t=" + new Date().getMilliseconds(), true);
+//  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
+req.send();
+}
 }
 function connect(id) {
-  document.getElementById("online").innerHTML = "<span style='color: green'>Connecting...</span>";
-  setTimeout(() => {
+ var req = new XMLHttpRequest();
+req.onload = function() {
+  if (this.responseText.includes("success")) {
+    //  document.getElementById("online").innerHTML = "Players Online: Click on a player to connect" + this.responseText;
+  }
+  else {
+    //analyze(this.responseText);
     document.getElementById("online").innerHTML = "<span style='color: red'>Error...., ...</span>";
     setTimeout(() => {
-    fetchList();
-    }, 1000);
-  }, 2000);
+  fetchList();
+}, 1000);
+  }
+ /* if (checkbg) {
+    runBg();
+  }*/
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/create.php?q="+id+".txt&cont=connect&t=" + new Date().getMilliseconds(), true);
+//  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
+req.send();
+
+  document.getElementById("online").innerHTML = "<span style='color: green'>Connecting...</span>";
+}
+
+function analyze(response) {
+  checkbg = false;
+  if (response.includes("connect")) {
+    alert("Someone wants to connect");
+  }
 }
 </script>
 </body>
