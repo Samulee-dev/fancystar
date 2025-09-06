@@ -6,17 +6,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
   <style>
-    body {
+        * {
+      box-sizing: border-box;
+      padding: 0;
       margin: 0;
-      font-family: sans-serif;
-      background: #eef;
-      text-align: center;
+    }
+    
+    body {
+      background: radial-gradient(ellipse at center, #0d1117 0%, #000000 100%);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       overflow: hidden;
-      user-select: none;
       background-image: url("../assets/bg2.png");
       background-size: 100% 100%;
+      user-select: none;
+    }
+h1 {
+      font-size: 2.5em;
+      color: #00f0ff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00f0ff;
     }
 
+    .bottle-btn {
+      width: 120px;
+      height: 120px;
+      background-image: url('../assets/bottle.png'); /* Replace with your bottle image */
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      animation: rotate 2.5s linear infinite;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 10px #00f0ff);
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #online {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 90%;
+      max-width: 300px;
+    box-shadow: 0.5px 0.5px 1px 0.5px black;
+    }
+
+    #online div {
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #00f0ff55;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      backdrop-filter: blur(4px);
+      text-align: center;
+    }
+
+    #online div:hover {
+      background: #00f0ff;
+      color: #000;
+      transform: scale(1.05);
+      font-weight: bold;
+      box-shadow: 0 0 12px #00f0ff;
+    }
     #gameArea {
       position: relative;
       width: 100%;
@@ -239,19 +301,120 @@ transition: background 0.3s;
 </head>
 
 <body>
+    <h1 style="margin-top: -40px;">FlipRoyale</h1>
+  
+  <div class="bottle-btn" onclick="spinBottle()"></div>
+  
+  <!--<h3>👥 Players Online – Click a name to join, or tap "Host" to create your own match.</h3>-->
+  <div id="online">
+    
+    <div>Connecting...</div>
+  </div>
+  </div>
   <div id="popupOverlay">
 <div id="popupBox">
-  <h2>🧐😇 Comming Soon</h2>
-  <p>This mode is not yet available (hint: this mode will be available before 5th august 😉)</p>
+  <h2>👋 Welcome</h2>
+  <p>🌟 Welcome to Flip Royale! 🌟
+Join the multiplayer arena, test your luck, and flip your way to victory! 🪙🔥</p>
   <button onclick="closePopup()" id="popcobtn">Continue</button>
 </div>
 </div>
 <script>
+let popupBox = document.getElementById("popupOverlay");
   function closePopup() {
     setTimeout(() => {
-  parent.postMessage("gameover", "*");
-}, 200);
+popupBox.style.display = "none";
+ // parent.postMessage("gameover", "*");
+}, 20);
   }
+var username = JSON.parse(localStorage.getItem("fancystar_fliproyale")).gamingName;
+ var alphabets = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
+    var numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+function generateId(length) {
+  let id = "";
+  for (i=0; i<=length; i++) {
+    id+=alphabets[Math.floor(Math.random() * alphabets.length)];
+    id+=numbers[Math.floor(Math.random() * numbers.length)];
+  }
+  return id;
+}
+var added = false;
+var plyid;
+  function addNew() {
+    var req = new XMLHttpRequest();
+    req.onload = function() {
+    //  console.log(this.responseText);
+    if (this.responseText == "success") {
+      added = true;
+    }
+    }
+    plyid = generateId(8);
+    req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/multi.php?id="+plyid+"&name="+username, true);
+  //  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
+    req.send();
+  }
+  fetchList();
+  function fetchList() {
+    var req = new XMLHttpRequest();
+req.onload = function() {
+  if (!this.responseText.includes("File not found or not allowed.")) {
+    document.getElementById("online").innerHTML = "Players Online: Click on a player to connect"+ this.responseText;
+   if (!added) {
+    addNew();
+   }
+   else {
+     if (this.responseText.includes(plyid)) {
+       document.getElementById(plyid).remove();
+       //alert("")
+     }
+   }
+    var buttons = document.querySelectorAll(".list");
+// Loop through and attach click event
+buttons.forEach(btn => {
+  btn.addEventListener("click", function() {
+   // console.log("Clicked ID:", this.id);
+   connect(this.id);
+    // or: console.log("Clicked ID:", btn.id);
+  });
+});
+  }
+  else {
+    document.getElementById("online").innerHTML = "<span style='color: red'>Error...., Reconnecting...</span>";
+    setTimeout(() => {
+      fetchList();
+      //console.log(this.responseText)
+    }, 1000);
+  }
+
+}
+req.onerror = function() {
+ document.getElementById("online").innerHTML = "<span style='color: red'>Error...., Reconnecting...</span>";
+setTimeout(() => {
+  fetchList();
+  //console.log(this.responseText)
+}, 1000);
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.php?q=list.txt&t="+new Date().getMilliseconds(), true);
+//  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
+req.send();
+  }
+  
+  // Get all elements with the class
+
+//  fetchList();
+//  addNew();
+var runBg() {
+  
+}
+function connect(id) {
+  document.getElementById("online").innerHTML = "<span style='color: green'>Connecting...</span>";
+  setTimeout(() => {
+    document.getElementById("online").innerHTML = "<span style='color: red'>Error...., ...</span>";
+    setTimeout(() => {
+    fetchList();
+    }, 1000);
+  }, 2000);
+}
 </script>
 </body>
 
