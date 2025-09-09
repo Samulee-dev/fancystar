@@ -49,7 +49,14 @@ h1 {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
+#online_1 {
+  display: flex;
+flex-direction: column;
+gap: 15px;
+width: 90%;
+max-width: 300px;
+box-shadow: 0.5px 0.5px 1px 0.5px black;
+}
     #online {
       display: flex;
       flex-direction: column;
@@ -57,9 +64,11 @@ h1 {
       width: 90%;
       max-width: 300px;
     box-shadow: 0.5px 0.5px 1px 0.5px black;
+    display: none;
     }
 
-    #online div {
+    #online div,
+    #online_1 div{
       padding: 12px 20px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid #00f0ff55;
@@ -72,7 +81,8 @@ h1 {
       text-align: center;
     }
 
-    #online div:hover {
+    #online div:hover,
+    #online_1 div:hover {
       background: #00f0ff;
       color: #000;
       transform: scale(1.05);
@@ -306,15 +316,21 @@ transition: background 0.3s;
   <div class="bottle-btn" onclick="spinBottle()"></div>
   
   <!--<h3>👥 Players Online – Click a name to join, or tap "Host" to create your own match.</h3>-->
+    <div id="online_1">
+    <div onclick="TwoP()">Two Players Online</div>
+    <div onclick="mainMenu()">MainMenu</div>
+  </div>
+  
   <div id="online">
     
     <div>Connecting...</div>
   </div>
+  
   </div>
   <div id="popupOverlay">
 <div id="popupBox">
-  <h2>👋 Welcome</h2>
-  <p>🌟 Welcome to Flip Royale! 🌟
+  <h2 id="pophead">👋 Welcome</h2>
+  <p id="popcobt">🌟 Welcome to Flip Royale! 🌟
 Join the multiplayer arena, test your luck, and flip your way to victory! 🪙🔥</p>
   <button onclick="closePopup()" id="popcobtn">Continue</button>
 </div>
@@ -336,7 +352,9 @@ function generateId(length) {
     id+=alphabets[Math.floor(Math.random() * alphabets.length)];
     id+=numbers[Math.floor(Math.random() * numbers.length)];
   }
+  
   return id;
+  //return "i8e2j7i0f3h6k9j3h2";
 }
 var added = false;
 var plyid;
@@ -351,18 +369,26 @@ var plyid;
     }
     }
     plyid = generateId(8);
+    runid = plyid;
     req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/multi.php?id="+plyid+"&name="+username, true);
   //  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
     req.send();
   }
-  fetchList();
+ // fetchList();
   function fetchList() {
     var req = new XMLHttpRequest();
 req.onload = function() {
   if (!this.responseText.includes("File not found or not allowed.")) {
-    document.getElementById("online").innerHTML = "Players Online: Click on a player to connect"+ this.responseText;
+    document.getElementById("online").innerHTML = "Players Online: Click on a player to connect"+ this.responseText + `<hr><div onclick="mainMenu()">MainMenu</div>`;
+    if (this.responseText.includes(localStorage.getItem("lastiid"))) {
+      Off(localStorage.getItem("lastiid"));
+      terminate(localStorage.getItem("lastiid") + ".txt");
+    }
    if (!added) {
     addNew();
+    setTimeout(() => {
+      localStorage.setItem("lastiid", plyid);
+    }, 2000);
    }
    else {
      if (this.responseText.includes(plyid)) {
@@ -376,6 +402,7 @@ buttons.forEach(btn => {
   btn.addEventListener("click", function() {
    // console.log("Clicked ID:", this.id);
    connect(this.id);
+  // runid = this.id;
     // or: console.log("Clicked ID:", btn.id);
   });
 });
@@ -385,7 +412,7 @@ buttons.forEach(btn => {
     setTimeout(() => {
       fetchList();
       //console.log(this.responseText)
-    }, 1000);
+    }, 500);
   }
 
 }
@@ -406,29 +433,34 @@ req.send();
 //  fetchList();
 //  addNew();
 var checkbg = false;
+var runid = "intro";
 function runBg() {
   if (added) {
   var req = new XMLHttpRequest();
 req.onload = function() {
-    if (!this.responseText.includes("File not found or not allowed.")) {
+    if (this.responseText.includes("File not found or not allowed.")) {
     //  document.getElementById("online").innerHTML = "Players Online: Click on a player to connect" + this.responseText;
     }
     else {
       analyze(this.responseText);
+    //  alert("hi")
     }
    if (checkbg) {
      runBg();
    }
 }
-req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.php?q="+plyid+".txt&t=" + new Date().getMilliseconds(), true);
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.php?q="+runid+".txt&t=" + new Date().getMilliseconds(), true);
 //  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
 req.send();
 }
 }
+var opponentid;
 function connect(id) {
+  opponentid = id;
  var req = new XMLHttpRequest();
 req.onload = function() {
   if (this.responseText.includes("success")) {
+    runid = opponentid;
     //  document.getElementById("online").innerHTML = "Players Online: Click on a player to connect" + this.responseText;
   }
   else {
@@ -442,20 +474,162 @@ req.onload = function() {
     runBg();
   }*/
 }
-req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/create.php?q="+id+".txt&cont=connect&t=" + new Date().getMilliseconds(), true);
+var msg = {
+  name: username,
+  name2: null,
+  cont: "connect"
+}
+var msg2 = JSON.stringify(msg);
+console.log(msg2);
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/create.php?q="+id+".txt&cont="+encodeURIComponent(msg2)+"&t=" + new Date().getMilliseconds(), true);
 //  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/list.txt?id=ghy&name=sam", true);
 req.send();
 
   document.getElementById("online").innerHTML = "<span style='color: green'>Connecting...</span>";
 }
-
+let cace = false;
 function analyze(response) {
   checkbg = false;
-  if (response.includes("connect")) {
-    alert("Someone wants to connect");
+  var responsec = JSON.parse(decodeURIComponent(response));
+  if (responsec.cont == "connect"&& runid != opponentid) {
+   // alert("Someone wants to connect");
+   popMsg("Connection Request", `${responsec.name} wants to connect`);
+  }
+  else if (responsec.name2 != null&& runid == opponentid&& !cace) {
+    accept2();
+    document.getElementById("online").innerHTML = "<span style='color: green'>Connection Successful...., Loading...</span>";
+      cace = true;
+    checkbg = true;
+    setTimeout(() => {
+      runBg();
+    }, 2000);
+    }
+  else if (responsec.cont == "connect"&& !cace) {
+    runBg();
+  }
+}
+
+function popMsg(head, body) {
+  document.getElementById("popupBox").innerHTML = `<h2 id="pophead">${head}</h2>
+  <p id="popcobt">${body}</p>
+  <button onclick="accept()" id="popcobtn">Accept</button>
+  <button onclick="decline()" id="popcobtn2">Decline</button>`;
+  document.getElementById("popupOverlay").style.display = "flex";
+}
+function accept() {
+  accept2();
+  accept3();
+  var file = plyid+".txt";
+  var ocont = `"name2":null`;
+  var ncont = `"name2":"${username}"`;
+  var req = new XMLHttpRequest();
+req.onload = function() {
+   if (this.responseText.includes("created")) {
+   closePopup();
+   setTimeout(() => {
+   checkbg = true;
+   runBg();
+   }, 2000);
+ }
+ else {
+   closePopup();
+   alert("An Error Occured");
+ }
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q="+plyid+".txt&search=" + ocont + "&replace=" + ncont + "&t=" + new Date().getMilliseconds(), true);
+req.send();
+}
+function accept2() {
+  var search = `<div class='list' id='${plyid}'>${username}</div>`;
+  var replace = "";
+  var req = new XMLHttpRequest();
+req.onload = function() {
+ if (this.responseText.includes("created")) {
+  
+ }
+ else {
+   
+ }
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q=list.txt&search="+search+"&replace="+replace+"&t=" + new Date().getMilliseconds(), true);
+req.send();
+}
+
+function accept3() {
+  var ocont = `"cont":"connect"`;
+var ncont = `"cont":"game"`;
+var req = new XMLHttpRequest();
+req.onload = function() {
+  if (this.responseText.includes("created")) {
+   /* closePopup();
+    checkbg = true;
+    runBg();*/
+  }
+  else {
+   /* closePopup();
+    alert("An Error Occured");*/
+  }
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q=" + plyid + ".txt&search=" + ocont + "&replace=" + ncont + "&t=" + new Date().getMilliseconds(), true);
+req.send();
+}
+
+function decline() {
+  
+}
+function terminate(file) {
+/*  var search = `<div class='list' id='${plyid}'>${username}</div>`;
+var replace = "";*/
+var req = new XMLHttpRequest();
+req.onload = function() {
+  if (this.responseText.includes("created")) {
+    
+  }
+  else {
+    
+  }
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/delete.php?q="+file+"&t=" + new Date().getMilliseconds(), true);
+req.send();
+}
+
+function Off(id) {
+  var search = `<div class='list' id='${id}'>${username}</div>`;
+  var replace = "";
+  var req = new XMLHttpRequest();
+  req.onload = function() {
+    if (this.responseText.includes("created")) {
+      localStorage.setItem("lastiid", plyid);
+    }
+    else {
+      
+    }
+  }
+  req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q=list.txt&search=" + search + "&replace=" + replace + "&t=" + new Date().getMilliseconds(), true);
+  req.send();
+}
+function TwoP() {
+  setTimeout(() => {
+    document.getElementById("online_1").style.display = "none";
+   document.getElementById("online").style.display = "block";
+   fetchList();
+  }, 200)
+}
+function mainMenu() {
+  if (plyid) {
+    Off(plyid);
+    terminate(plyid+".txt");
+    setTimeout(() => {
+      parent.postMessage("gameover", "*");
+    }, 500);
+  }
+  else {
+    setTimeout(() => {
+  parent.postMessage("gameover", "*");
+}, 200);
   }
 }
 </script>
 </body>
 
-</html>
+  </html>
