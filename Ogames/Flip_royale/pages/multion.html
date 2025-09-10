@@ -89,6 +89,16 @@ box-shadow: 0.5px 0.5px 1px 0.5px black;
       font-weight: bold;
       box-shadow: 0 0 12px #00f0ff;
     }
+   #gameScreen {
+      position: absolute;
+width: 100%;
+height: 100vh;
+top: 0px;
+left: 0px;
+overflow: hidden;
+display: none;
+/*display: flex;*/
+    }
     #gameArea {
       position: relative;
       width: 100%;
@@ -127,7 +137,7 @@ box-shadow: 0.5px 0.5px 1px 0.5px black;
       margin: 20px auto;
       border-radius: 10px;
       overflow: hidden;
-   
+  
     }
 
     #chargeFill {
@@ -150,12 +160,17 @@ color: #000;
 font-weight: bold;
 cursor: pointer;
 transition: background 0.3s;
+margin-left: 50%;
+margin-top: 30px;
+transform: translate(-50%,  -50%);
     }
 
     #message {
       font-size: 20px;
       height: 30px;
       margin-top: 10px;
+      margin-left: 50%;
+transform: translate(-50%, -50%);
     }
     #floor {
       position: absolute;
@@ -311,9 +326,9 @@ transition: background 0.3s;
 </head>
 
 <body>
-    <h1 style="margin-top: -40px;">FlipRoyale</h1>
+    <h1 style="margin-top: -40px;" id="1h1">FlipRoyale</h1>
   
-  <div class="bottle-btn" onclick="spinBottle()"></div>
+  <div class="bottle-btn" onclick="spinBottle()" id="bot1s"></div>
   
   <!--<h3>👥 Players Online – Click a name to join, or tap "Host" to create your own match.</h3>-->
     <div id="online_1">
@@ -326,7 +341,28 @@ transition: background 0.3s;
     <div>Connecting...</div>
   </div>
   
+ <div id="gameScreen">
+         <div class="player-barr">
+      <div class="playerr" id="playersc">0</div>
+      <div class="playerr" id="cpusc">0</div>
+    </div>
+    
+    <div class="player-bar" id="playerBar">
+    <div class="player current" id="plyname">Samuel</div>
+    <div class="player" id="oppname">...</div>
   </div>
+  
+  <div id="chargeBar"><div id="chargeFill"></div></div>
+  <button id="btn">Hold to Charge</button>
+  <div id="message"></div>
+  <div id="gameArea">
+    <div id="bottle"></div>
+    
+    <div id="floor"><img src="/assets/table.png" alt="" height="100%" width="100%"></div>
+    
+  </div>
+ <button onclick="Quit()" style="position: absolute; top: 0px; left: 70%;" class="button">Quit Game</button> 
+ </div>
   <div id="popupOverlay">
 <div id="popupBox">
   <h2 id="pophead">👋 Welcome</h2>
@@ -408,7 +444,7 @@ buttons.forEach(btn => {
 });
   }
   else {
-    document.getElementById("online").innerHTML = "<span style='color: red'>Error...., Reconnecting...</span>";
+    document.getElementById("online").innerHTML = "<span style='color: red'>Error...., Reconnecting...</span>"+`<hr><div onclick="mainMenu()">MainMenu</div>`;
     setTimeout(() => {
       fetchList();
       //console.log(this.responseText)
@@ -417,7 +453,7 @@ buttons.forEach(btn => {
 
 }
 req.onerror = function() {
- document.getElementById("online").innerHTML = "<span style='color: red'>Error...., Reconnecting...</span>";
+ document.getElementById("online").innerHTML = "<span style='color: red'>Error...., Reconnecting...</span>"+ `<hr><div onclick="mainMenu()">MainMenu</div>`;
 setTimeout(() => {
   fetchList();
   //console.log(this.responseText)
@@ -434,11 +470,28 @@ req.send();
 //  addNew();
 var checkbg = false;
 var runid = "intro";
+var errorcon = 0;
+var errorcon2 = 0;
+var opponentName = "...";
 function runBg() {
   if (added) {
   var req = new XMLHttpRequest();
 req.onload = function() {
     if (this.responseText.includes("File not found or not allowed.")) {
+      if (runid == opponentid) {
+        if (errorcon >= 6) {
+          errorcon = 0;
+          runid = plyid;
+          document.getElementById("online").innerHTML = "<span style='color: red'>Error...., ...</span>";
+setTimeout(() => {
+  fetchList();
+}, 1000);
+        }
+        else {
+       errorcon++;
+       runBg();
+        }
+      }
     //  document.getElementById("online").innerHTML = "Players Online: Click on a player to connect" + this.responseText;
     }
     else {
@@ -474,6 +527,13 @@ req.onload = function() {
     runBg();
   }*/
 }
+req.onerror = function() {
+  document.getElementById("online").innerHTML = "<span style='color: red'>Error...., ...</span>";
+setTimeout(() => {
+  runid = plyid;
+  fetchList();
+}, 1000);
+}
 var msg = {
   name: username,
   name2: null,
@@ -494,18 +554,36 @@ function analyze(response) {
   if (responsec.cont == "connect"&& runid != opponentid) {
    // alert("Someone wants to connect");
    popMsg("Connection Request", `${responsec.name} wants to connect`);
+   opponentName = responsec.name;
   }
   else if (responsec.name2 != null&& runid == opponentid&& !cace) {
     accept2();
+    opponentName = responsec.name2;
     document.getElementById("online").innerHTML = "<span style='color: green'>Connection Successful...., Loading...</span>";
       cace = true;
     checkbg = true;
     setTimeout(() => {
       runBg();
+      StartG(true);
     }, 2000);
     }
   else if (responsec.cont == "connect"&& !cace) {
     runBg();
+    if (runid == opponentid) {
+      if (errorcon2 >= 100) {
+  terminate(opponentid + ".txt");
+  errorcon2 = 0;
+  document.getElementById("online").innerHTML = "<span style='color: red'>Error...., ...</span>";
+  setTimeout(() => {
+    runid = plyid;
+    fetchList();
+  }, 1000);
+}
+else {
+  errorcon2++;
+  console.log(errorcon2);
+}
+    }
   }
 }
 
@@ -529,6 +607,7 @@ req.onload = function() {
    setTimeout(() => {
    checkbg = true;
    runBg();
+   StartG(false);
    }, 2000);
  }
  else {
@@ -575,7 +654,8 @@ req.send();
 }
 
 function decline() {
-  
+  terminate(plyid+".txt");
+  closePopup();
 }
 function terminate(file) {
 /*  var search = `<div class='list' id='${plyid}'>${username}</div>`;
@@ -628,6 +708,457 @@ function mainMenu() {
   parent.postMessage("gameover", "*");
 }, 200);
   }
+}
+ // checkStart();
+  var loaded = false;
+ function checkStart() {
+   if (client) {
+    document.getElementById("btn").style.display = "none"; 
+    message.innerText = "Waiting for "+opponentName;
+   }
+    showPopup("•Don't flip too high<br> •The First player to have 15 points wins the game", "👌 Tip");
+  }
+    const bottle = document.getElementById('bottle');
+    const chargeFill = document.getElementById('chargeFill');
+    const btn = document.getElementById('btn');
+    const message = document.getElementById('message');
+var playerScore = document.getElementById("playersc");
+var botScore = document.getElementById("cpusc");
+var nxtturn = false;
+let score = 0;
+let cpuscore = 0;
+    const bottleHeight = 120;
+    const floorHeight = 40;
+
+    let floorY = window.innerHeight/2 - bottleHeight - floorHeight;
+    let positionY = floorY;
+    let velocityY = 0;
+    let gravity = 0.6;
+    let rotation = 0;
+    let rotationVelocity = 0;
+    let bounceCount = 0;
+    let charging = false;
+    let charge = 0;
+    let chargeInterval;
+    let isAnimating = false;
+
+    bottle.style.top = `${floorY}px`;
+
+    function startCharging() {
+      if (isAnimating) return;
+      charging = true;
+      charge = 0;
+      chargeFill.style.width = '0%';
+      chargeInterval = setInterval(() => {
+        charge = Math.min(charge + 0.2, 20);
+        chargeFill.style.width = `${(charge / 20) * 100}%`;
+      }, 30);
+    }
+let wintime = true;
+    function stopCharging() {
+      if (!charging || isAnimating) return;
+      charging = false;
+      clearInterval(chargeInterval);
+      chargeFill.style.width = '0%';
+      if (allowplay&&charge > 2.0&&  charge < 3.0&& wintime) {
+        charge = 2.6;
+        wintime = false;
+      }
+      if (allowplay && charge > 5.0 && charge < 6.0 && wintime) {
+  charge = 5.6;
+  wintime = false;
+}
+      launchBottle();
+    }
+
+    function launchBottle() {
+      isAnimating = true;
+      velocityY = -charge * 2.5;
+      rotationVelocity = charge * 3;
+      bounceCount = 0;
+      message.textContent = '';
+      requestAnimationFrame(update);
+    }
+
+    function update() {
+      velocityY += gravity;
+      positionY += velocityY;
+      rotation += rotationVelocity;
+
+      if (positionY >= floorY) {
+        positionY = floorY;
+
+        if (Math.abs(velocityY) > 1) {
+          velocityY = -velocityY * 0.45;
+          rotationVelocity *= 0.9;
+          bounceCount++;
+        } else {
+          velocityY = 0;
+          rotationVelocity *= 0.95;
+          bounceCount++;
+        }
+
+        if (Math.abs(velocityY) < 0.3 && Math.abs(rotationVelocity) < 0.1 && bounceCount > 1) {
+          rotation = rotation % 360;
+          settleBottle(rotation);
+          return;
+        }
+      }
+
+      updateVisuals();
+      requestAnimationFrame(update);
+    }
+
+    function updateVisuals() {
+      bottle.style.top = `${positionY}px`;
+      bottle.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+    }
+
+    function settleBottle(angle) {
+      isAnimating = false;
+
+      if (angle >= 330 || angle <= 30) {
+        // Upright
+        smoothRotateTo(0);
+ if (allowplay) {
+   score += 1;
+ }
+ if (!allowplay) {
+   cpuscore += 1;
+ }
+
+ nxtturn = false;
+        message.textContent = "🎯 Perfect Landing!";
+   if (allowplay) {
+    /*allowplay = false;
+     nextTurn();
+     allowplay = true;*/
+   }
+   //nextTurn();
+        showPopup((perfectMessages[Math.floor(Math.random() * perfectMessages.length)]),"🎯 Perfect!");
+        
+         if (score >= 15|| cpuscore >= 15) {
+   winGame();
+ }
+      } else if (angle > 30 && angle < 150) {
+        
+        // Fall right
+        nxtturn = true;
+        bottle.style.marginTop = "15px";
+        smoothRotateTo(90);
+        message.textContent = "💥 It Fell!";
+        if (allowplay) {
+          wintime = true;
+        }
+        showPopup((failMessages[Math.floor(Math.random() * failMessages.length)]),"💥 Oops!")
+      } else if (angle > 210 && angle < 330) {
+        // Fall left
+        nxtturn = true;
+        smoothRotateTo(270);
+        bottle.style.marginTop = "15px";
+        message.textContent = "💥 It Fell!";
+        if (allowplay) {
+  wintime = true;
+}
+        showPopup((failMessages[Math.floor(Math.random() * failMessages.length)]),"💥 Oops!")
+      } else {
+        // Backward
+        nxtturn = true;
+        smoothRotateTo(180);
+        message.textContent = "💥 It Fell!";
+        showPopup((failMessages[Math.floor(Math.random() * failMessages.length)]),"💥 Oops!")
+      }
+      
+    }
+
+    function smoothRotateTo(targetAngle) {
+      const step = () => {
+        const diff = targetAngle - rotation;
+        if (Math.abs(diff) < 1) {
+          rotation = targetAngle;
+          updateVisuals();
+          return;
+        }
+        rotation += diff * 0.2;
+        updateVisuals();
+        requestAnimationFrame(step);
+      };
+      step();
+    }
+var allowplay = true;
+    // Event listeners
+    btn.addEventListener('mousedown',()=> {if (allowplay) {
+      startCharging();
+    }});
+    btn.addEventListener('mouseup', stopCharging);
+    btn.addEventListener('mouseleave', () => charging && stopCharging());
+
+    btn.addEventListener('touchstart', (e) => {
+     setTimeout(() => {
+       btn.innerText = "Release to Flip";
+     }, 50);
+      e.preventDefault();
+      if (allowplay) {
+      startCharging();
+      }
+    });
+
+    btn.addEventListener('touchend', (e) => {
+      setTimeout(() => {
+  btn.innerText = "Hold to Charge";
+}, 50);
+      e.preventDefault();
+      if (allowplay) {
+      stopCharging();
+      }
+    });
+
+    // Resize handling
+    document.getElementById("floor").style.top = (floorY - 15) + "px";
+    document.getElementById("floor").style.left = ((innerWidth/2)-160)+"px";
+    window.addEventListener('resize', () => {
+      floorY = window.innerHeight/2 - bottleHeight - floorHeight;
+      
+      if (!isAnimating) {
+        positionY = floorY;
+        bottle.style.top = `${positionY}px`;
+      }
+    });
+    
+    /*setTimeout(() => {
+      //startCharging();
+      charge = 2.6;
+      charging = true
+    }, 1000);
+    setTimeout(() => {
+    
+  stopCharging();
+}, 2400);*/
+
+//1400 2.6 2.7 2.8 3.85 6.9
+const failMessages = [
+  "💥 Oops... Try again!",
+  "😅 Not quite!",
+  "👎 It flopped!",
+  "😬 So close!",
+  "🙈 Whoopsie!",
+  "🫠 Gravity wins!",
+  "🤦‍♂️ That didn’t work!",
+  "🫢 Bottle down!",
+];
+
+const perfectMessages = [
+  "🎯 Perfect Landing!",
+  "🔥 Bottle Boss!",
+  "✅ Clean Landing!",
+  "🏆 You’re a flippin’ legend!",
+  "🙌 Smooth move!",
+  "🎉 That was awesome!",
+  "💫 Gravity? Never heard of it!",
+  "✨ That's precision!",
+];
+
+
+  function showPopup(message, title = "message") {
+    const overlay = document.getElementById("popupOverlay");
+    const box = document.getElementById("popupBox");
+    box.innerHTML = `<h2 id="pophead">${title}</h2>
+  <p id="popcobt">${message}</p>
+  <button onclick="closePopup2()" id="popcobtn">Continue</button>`;
+    /*document.querySelector("#pophead").innerText = title;
+    document.querySelector("#popcobt").innerHTML = message;*/
+
+    overlay.style.display = "flex";
+
+    // Reset animation
+    box.style.animation = "none";
+    void box.offsetWidth; // Force reflow
+    box.style.animation = "zoomIn 0.4s ease-out forwards";
+    if (loaded) {
+    playerScore.innerText = score;
+    botScore.innerText = cpuscore;
+    }
+  }
+
+  function closePopup2() {
+    const overlay = document.getElementById("popupOverlay");
+    if (gameover) {
+      parent.postMessage("gameover", "*");
+    }
+    if (!userwin) {
+    overlay.style.display = "none";
+  }
+    if (loaded&& nxtturn&& !userwin) {
+      
+    bottle.style.transform = `translateX(-50%) rotate(${0}deg)`;
+    bottle.style.marginTop = "0px";
+    message.innerText = "";
+    charge = 0;
+    rotation = 0;
+    velocityY = 0;
+    nextTurn();
+    if (current) {
+      btn.style.opacity = "0";
+      allowplay = false;
+    }
+    else {
+      btn.style.opacity = "1";
+      allowplay = true;
+    }
+    }
+    else if (!userwin) {
+      loaded = true;
+      if (!nxtturn&& !allowplay) {
+      //  alert("un")
+      message.innerText = "";
+        cpuPlay();
+      }
+    }
+  }
+  
+const players = document.querySelectorAll('.player');
+var name;
+const userIndex = 0; // Samuel (Player 1) is the user
+let current = 0;
+
+function updateTurn() {
+  players.forEach((p, i) => {
+    p.classList.toggle('current', i === current);
+  });
+  
+   name = players[current].textContent;
+  const message2 = current === userIndex ? "Your Turn" :` ${name}'s Turn`;
+  message.innerText = message2;
+  message.style.color = "greenyellow";
+  if (current == 1) {
+    cpuPlay();
+  }
+  setTimeout(() => {
+    message.innerText = "";
+    message.style.color = "black";
+  }, 1000);
+  
+}
+
+function nextTurn() {
+  current = (current + 1) % players.length;
+  updateTurn();
+}
+
+updateTurn();
+  // 🚀 Example usage
+  // showPopup("🎯 You nailed it!", "Perfect!");
+  //var cpuMoves = [2.6, 4.0, 5.6, 6.9];
+  var cpuMoves = [2.6, 5.6, 6.8, 4.0, 6.9, 9.0, 3.0];
+  let rt = 0;
+function cpuPlay() {
+  let randomMove = Math.floor(Math.random() * cpuMoves.length);
+  setTimeout(() => {
+    let currentMove = cpuMoves[randomMove];
+   let tt = setInterval(() => {
+      rt++
+      if (charge >= currentMove) {
+        clearInterval(tt)
+        stopCharging();
+      }
+      
+    }, 1);
+    startCharging();
+  }, 400);
+}
+var username = JSON.parse(localStorage.getItem("fancystar_fliproyale")).gamingName;
+document.getElementById("plyname").innerText = username;
+var currentHighscores = JSON.parse(localStorage.getItem("fancystar_fliproyale")).highScores;
+var newHighscore = [username, "Cpu-Bot"];
+var soundOption = JSON.parse(localStorage.getItem("fancystar_fliproyale")).music;
+let userwin = false;
+let gameover = false;
+function winGame() {
+  userwin = true;
+  btn.style.opacity = "0";
+allowplay = false;
+if (score >= 15 ) {
+  document.getElementById("popcobtn").style.opacity = 0;
+  showPopup(`${username} VS Cpu-Bot <br> ${score} : ${cpuscore}<br> 🎉 ${username} wins the game`, "🏆 Winner");
+  setTimeout(() => {
+    document.getElementById("popcobtn").style.opacity = 1;
+    document.getElementById("popcobtn").innerText = "Continue (Game Over)";
+    gameover = true;
+  }, 2000);
+}
+else if (cpuscore >= 15) {
+  document.getElementById("popcobtn").style.opacity = 0;
+  showPopup(`${username} VS Cpu-Bot <br> ${score} : ${cpuscore}<br> Cpu-Bot wins the game`, "😔 You Lose");
+  setTimeout(() => {
+    document.getElementById("popcobtn").style.opacity = 1;
+    document.getElementById("popcobtn").innerText = "Continue (Game Over)";
+    gameover = true;
+  }, 2000);
+}
+newHighscore[2] = score;
+newHighscore[3] = cpuscore;
+currentHighscores.push(newHighscore);
+//console.log(currentHighscores);
+var newStorage = {
+  gamingName: username,
+  highScores: currentHighscores,
+  music: soundOption
+}
+localStorage.setItem("fancystar_fliproyale", JSON.stringify(newStorage));
+}
+
+function Quit() {
+  /*setTimeout(() => {
+    parent.postMessage("gameover", "*");
+  }, 200);*/
+  mainMenu();
+}
+var client = false;
+function StartG(bool) {
+  if (bool) {
+  document.getElementById("oppname").innerText = opponentName;
+  }
+  else {
+    document.getElementById("plyname").innerText = opponentName;
+    document.getElementById("oppname").innerText = username;
+    client = true;
+  }
+  document.getElementById("online").style.display = "none";
+  document.getElementById("1h1").style.display = "none";
+  document.getElementById("bot1s").style.display = "none";
+  document.getElementById("gameScreen").style.display = "block";
+  checkStart();
+/*  document.getElementById("popupBox").innerHTML = `<h2 id="pophead">👋 Welcome</h2>
+  <p id="popcobt">🌟 Welcome to Flip Royale! 🌟
+    Join the multiplayer arena, test your luck, and flip your way to victory! 🪙🔥</p>
+  <button onclick="closePopup2()" id="popcobtn">Continue</button>`;*/
+}
+var gupdate = false;
+function gameUpdate(old, newg) {
+  var file = runid + ".txt";
+var ocont = old;
+var ncont = newg;
+var req = new XMLHttpRequest();
+req.onload = function() {
+  if (this.responseText.includes("created")) {
+  //  closePopup();
+  /*  setTimeout(() => {
+      checkbg = true;
+      runBg();
+   //   StartG(false);
+    }, 2000);*/
+   /* if (gupdate) {
+      gameUpdate(old)
+    }*/
+  }
+  else {
+    gameUpdate(old, newg);
+    /*closePopup();
+    alert("An Error Occured");*/
+  }
+}
+req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q=" + runid + ".txt&search=" + ocont + "&replace=" + ncont + "&t=" + new Date().getMilliseconds(), true);
+req.send();
 }
 </script>
 </body>
