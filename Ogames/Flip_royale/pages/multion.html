@@ -551,7 +551,19 @@ let cace = false;
 function analyze(response) {
   checkbg = false;
   var responsec = JSON.parse(decodeURIComponent(response));
-  if (responsec.cont == "connect"&& runid != opponentid) {
+  if (connected) {
+  //  console.log(responsec);
+ if (client&& hostturn&& response.includes(`"cont":[`)) {
+   chargeFill.style.width = '0%';
+      charge = responsec.cont[0];
+      chargeFill.style.width = `${(charge / 20) * 100}%`;
+      if (responsec.cont[1]) {
+        stopCharging(true);
+      }
+ }
+    runBg();
+  }
+  else if (responsec.cont == "connect"&& runid != opponentid&& !connected) {
    // alert("Someone wants to connect");
    popMsg("Connection Request", `${responsec.name} wants to connect`);
    opponentName = responsec.name;
@@ -579,6 +591,7 @@ function analyze(response) {
     fetchList();
   }, 1000);
 }
+
 else {
   errorcon2++;
   console.log(errorcon2);
@@ -594,6 +607,7 @@ function popMsg(head, body) {
   <button onclick="decline()" id="popcobtn2">Decline</button>`;
   document.getElementById("popupOverlay").style.display = "flex";
 }
+var connected = false;
 function accept() {
   accept2();
   accept3();
@@ -605,6 +619,7 @@ req.onload = function() {
    if (this.responseText.includes("created")) {
    closePopup();
    setTimeout(() => {
+     connected = true;
    checkbg = true;
    runBg();
    StartG(false);
@@ -741,9 +756,12 @@ let cpuscore = 0;
     let charge = 0;
     let chargeInterval;
     let isAnimating = false;
-
+/*let hhhy =  { h: [[1, false], [1, false]]};
+console.log(JSON.stringify(hhhy))*/
     bottle.style.top = `${floorY}px`;
-
+    var oldrepl = `"cont":"game"`;
+    var hostturn = true;
+    var clientturn = false;
     function startCharging() {
       if (isAnimating) return;
       charging = true;
@@ -752,12 +770,46 @@ let cpuscore = 0;
       chargeInterval = setInterval(() => {
         charge = Math.min(charge + 0.2, 20);
         chargeFill.style.width = `${(charge / 20) * 100}%`;
+        var oldg;
+        var newgg;
+     //   var ply;
+        /*if (!client&& hostturn) {
+          oldgg = oldrepl;
+          newgg = `"cont":[${charge}, false]`;
+          gameUpdate(oldgg, newgg);
+          oldrepl = newgg;
+        }
+        else if (clientturn&& client) {
+          oldgg = oldrepl;
+newgg = `"cont":[${charge}, false]`;
+gameUpdate(oldgg, newgg);
+oldrepl = newgg;
+        }*/
       }, 30);
     }
 let wintime = true;
-    function stopCharging() {
+    function stopCharging(tp) {
+      if (tp == true) {
+        charging = true;
+      }
       if (!charging || isAnimating) return;
       charging = false;
+     if (tp != true) {
+      if (!client && hostturn) {
+  oldgg = oldrepl;
+  newgg = `"cont":[${charge}, true]`;
+ // gupdate = true;
+  gameUpdate(oldgg, newgg);
+  oldrepl = newgg;
+}
+else if (clientturn && client) {
+  oldgg = oldrepl;
+  newgg = `"cont":[[${0}, ${0}], [${charge}, ${true}]]`;
+ // gupdate = true;
+  gameUpdate(oldgg, newgg);
+  oldrepl = newgg;
+}
+}
       clearInterval(chargeInterval);
       chargeFill.style.width = '0%';
       if (allowplay&&charge > 2.0&&  charge < 3.0&& wintime) {
@@ -1128,19 +1180,23 @@ function StartG(bool) {
   document.getElementById("bot1s").style.display = "none";
   document.getElementById("gameScreen").style.display = "block";
   checkStart();
+  runBg();
 /*  document.getElementById("popupBox").innerHTML = `<h2 id="pophead">👋 Welcome</h2>
   <p id="popcobt">🌟 Welcome to Flip Royale! 🌟
     Join the multiplayer arena, test your luck, and flip your way to victory! 🪙🔥</p>
   <button onclick="closePopup2()" id="popcobtn">Continue</button>`;*/
 }
-var gupdate = false;
+var gupdate = true;
 function gameUpdate(old, newg) {
+  if (gupdate) {
+    gupdate = false;
   var file = runid + ".txt";
 var ocont = old;
 var ncont = newg;
 var req = new XMLHttpRequest();
 req.onload = function() {
   if (this.responseText.includes("created")) {
+    gupdate = true;
   //  closePopup();
   /*  setTimeout(() => {
       checkbg = true;
@@ -1152,6 +1208,7 @@ req.onload = function() {
     }*/
   }
   else {
+    gupdate = true;
     gameUpdate(old, newg);
     /*closePopup();
     alert("An Error Occured");*/
@@ -1159,6 +1216,38 @@ req.onload = function() {
 }
 req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q=" + runid + ".txt&search=" + ocont + "&replace=" + ncont + "&t=" + new Date().getMilliseconds(), true);
 req.send();
+}
+}
+
+function gameUpdate2(old, newg) {
+   // gupdate = false;
+    var file = runid + ".txt";
+    var ocont = old;
+    var ncont = newg;
+    var req = new XMLHttpRequest();
+    req.onload = function() {
+      if (this.responseText.includes("created")) {
+       // gupdate = true;
+        //  closePopup();
+        /*  setTimeout(() => {
+            checkbg = true;
+            runBg();
+         //   StartG(false);
+          }, 2000);*/
+        /* if (gupdate) {
+           gameUpdate(old)
+         }*/
+      }
+      else {
+     //   gupdate = true;
+        gameUpdate2(old, newg);
+        /*closePopup();
+        alert("An Error Occured");*/
+      }
+    }
+    req.open("GET", "https://fancystars.com.ng/Games/multi_v1.0/update.php?q=" + runid + ".txt&search=" + ocont + "&replace=" + ncont + "&t=" + new Date().getMilliseconds(), true);
+    req.send();
+  
 }
 </script>
 </body>
